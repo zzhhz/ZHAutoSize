@@ -13,6 +13,8 @@ package com.zzh.lib.core.utils;
 
 import android.util.Log;
 
+import com.zzh.lib.core.HLibrary;
+
 /**
  * @date: 2019/9/5
  * @email: zzh_hz@126.com
@@ -21,24 +23,12 @@ import android.util.Log;
  * @description: LogUtil.java 日志输出
  */
 public class LogUtil {
-
     private static final int ELEMENTS_INDEX = 1;
-
     static String className;
     static String methodName;
     static int lineNumber;
 
-    public static boolean isDebug = true;
-
     private LogUtil() {
-    }
-
-    public static void setDebug(boolean isDebug) {
-        LogUtil.isDebug = isDebug;
-    }
-
-    public static boolean isDebuggable() {
-        return isDebug;
     }
 
     private static String createLog(String log) {
@@ -59,14 +49,14 @@ public class LogUtil {
     }
 
     public static void e(String message) {
-        if (!isDebuggable())
+        if (!HLibrary.isDebug())
             return;
         getMethodNames(new Throwable().getStackTrace());
         Log.e(className, createLog(message));
     }
 
     public static void i(String message) {
-        if (!isDebuggable())
+        if (!HLibrary.isDebug())
             return;
 
         getMethodNames(new Throwable().getStackTrace());
@@ -74,7 +64,7 @@ public class LogUtil {
     }
 
     public static void d(String message) {
-        if (!isDebuggable())
+        if (!HLibrary.isDebug())
             return;
 
         getMethodNames(new Throwable().getStackTrace());
@@ -82,7 +72,7 @@ public class LogUtil {
     }
 
     public static void v(String message) {
-        if (!isDebuggable())
+        if (!HLibrary.isDebug())
             return;
 
         getMethodNames(new Throwable().getStackTrace());
@@ -90,7 +80,7 @@ public class LogUtil {
     }
 
     public static void w(String message) {
-        if (!isDebuggable())
+        if (!HLibrary.isDebug())
             return;
 
         getMethodNames(new Throwable().getStackTrace());
@@ -98,7 +88,7 @@ public class LogUtil {
     }
 
     public static void wtf(String message) {
-        if (!isDebuggable())
+        if (!HLibrary.isDebug())
             return;
 
         getMethodNames(new Throwable().getStackTrace());
