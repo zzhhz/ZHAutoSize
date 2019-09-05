@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -14,6 +16,8 @@ import com.trello.rxlifecycle3.components.support.RxAppCompatActivity;
 import com.zzh.mvvm.base.BaseViewModel;
 import com.zzh.mvvm.base.IBaseView;
 import com.zzh.mvvm.bus.Messenger;
+import com.zzh.mvvm.bus.binding.command.BindingAction;
+import com.zzh.mvvm.ui.container.ContainerActivity;
 import com.zzh.mvvm.ui.dialog.LoadingDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,7 +47,6 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //页面接收的参数方法
-        EventBus.getDefault().register(this);
         initParams();
         initViewDataBinding(savedInstanceState);
         registerUIChangeLiveDataCallBack();
@@ -56,7 +59,6 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
         super.onDestroy();
         if (viewModel != null) {
             Messenger.getDefault().unregister(viewModel);
@@ -110,7 +112,13 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
 
     private void registerUIChangeLiveDataCallBack() {
         //加载对话框显示
-        viewModel.getUC().getShowDialogEvent().observe(this, title -> showDialog(title));
+        viewModel.getUC().getShowDialogEvent().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String title) {
+                showDialog(title);
+            }
+        });
+
         //加载对话框消失
         viewModel.getUC().getDismissDialogEvent().observe(this, v -> dismissDialog());
         //跳入新页面
@@ -170,12 +178,12 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
      * @param bundle        跳转所携带的信息
      */
     public void startContainerActivity(String canonicalName, Bundle bundle) {
-        /*Intent intent = new Intent(this, ContainerActivity.class);
+        Intent intent = new Intent(this, ContainerActivity.class);
         intent.putExtra(ContainerActivity.FRAGMENT, canonicalName);
         if (bundle != null) {
             intent.putExtra(ContainerActivity.BUNDLE, bundle);
         }
-        startActivity(intent);*/
+        startActivity(intent);
     }
 
     /**
@@ -203,8 +211,4 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
      */
     protected abstract int setLayoutIds(Bundle savedInstanceState);
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventHandler(String action) {
-
-    }
 }

@@ -18,7 +18,7 @@ import java.util.List;
  * @email: zzh_hz@126.com
  * @QQ: 1299234582
  * @author: zzh
- * @description: ReformWaterPrice
+ * @description:
  * @since 1.0
  */
 public abstract class BaseRecyclerAdapter<T, V extends ViewDataBinding> extends RecyclerView.Adapter<BaseRecyclerViewHolder> {

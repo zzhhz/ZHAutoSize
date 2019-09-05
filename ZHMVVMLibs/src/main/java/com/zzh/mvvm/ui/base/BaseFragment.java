@@ -19,6 +19,7 @@ import com.trello.rxlifecycle3.components.support.RxFragment;
 import com.zzh.mvvm.base.BaseViewModel;
 import com.zzh.mvvm.base.IBaseView;
 import com.zzh.mvvm.bus.Messenger;
+import com.zzh.mvvm.ui.container.ContainerActivity;
 import com.zzh.mvvm.ui.dialog.LoadingDialog;
 
 import java.lang.reflect.ParameterizedType;
@@ -184,12 +185,12 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
      * @param bundle        跳转所携带的信息
      */
     public void startContainerActivity(String canonicalName, Bundle bundle) {
-        /*Intent intent = new Intent(this, ContainerActivity.class);
+        Intent intent = new Intent(getActivity(), ContainerActivity.class);
         intent.putExtra(ContainerActivity.FRAGMENT, canonicalName);
         if (bundle != null) {
             intent.putExtra(ContainerActivity.BUNDLE, bundle);
         }
-        startActivity(intent);*/
+        startActivity(intent);
     }
 
 
@@ -232,5 +233,9 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
                 binding.unbind();
             }
         }
+    }
+
+    public boolean isBackPressed() {
+        return false;
     }
 }

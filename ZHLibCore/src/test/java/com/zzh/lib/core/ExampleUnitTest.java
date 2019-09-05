@@ -1,4 +1,4 @@
-package com.zzh.mvvm;
+package com.zzh.lib.core;
 
 import org.junit.Test;
 

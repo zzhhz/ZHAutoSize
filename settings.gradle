@@ -1,1 +1,1 @@
-include ':app', ':ZHMVVMLibs', ':ZHNetLibs'
+include ':app', ':ZHMVVMLibs', ':ZHNetLibs', ':ZHLibCore'

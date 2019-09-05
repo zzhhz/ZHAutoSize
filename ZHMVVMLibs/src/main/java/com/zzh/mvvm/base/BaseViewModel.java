@@ -15,7 +15,9 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
+import com.zzh.mvvm.bus.Messenger;
 import com.zzh.mvvm.bus.SingleLiveEvent;
+import com.zzh.mvvm.bus.binding.command.BindingAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -165,12 +167,10 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel {
 
     @Override
     public void registerRxBus() {
-
     }
 
     @Override
     public void removeRxBus() {
-
     }
 
     public final class UIChangeLiveData extends SingleLiveEvent {
@@ -222,6 +222,7 @@ public class BaseViewModel extends AndroidViewModel implements IBaseViewModel {
         public static String CLASS = "CLASS";
         public static String CANONICAL_NAME = "CANONICAL_NAME";
         public static String BUNDLE = "BUNDLE";
+        public static final String SHOW_MSG = "show_msg";
     }
 
     Toast toast;

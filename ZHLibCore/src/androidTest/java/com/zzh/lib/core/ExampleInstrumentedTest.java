@@ -1,4 +1,4 @@
-package com.zzh.mvvm;
+package com.zzh.lib.core;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.zzh.mvvm.test", appContext.getPackageName());
+        assertEquals("com.zzh.lib.core.test", appContext.getPackageName());
     }
 }

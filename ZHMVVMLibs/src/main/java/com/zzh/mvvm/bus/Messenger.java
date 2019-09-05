@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * About : kelin的Messenger
+ * 订阅消息
  */
 public class Messenger {
 
