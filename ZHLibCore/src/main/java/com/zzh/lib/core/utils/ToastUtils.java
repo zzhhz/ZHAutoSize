@@ -1,5 +1,8 @@
 package com.zzh.lib.core.utils;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.zzh.lib.core.HLibrary;
@@ -11,14 +14,56 @@ import com.zzh.lib.core.HLibrary;
  * @email: zzh_hz@126.com
  * @QQ: 1299234582
  * @author: zzh
- * @description: ZHAutoSize.git
+ * @description: 提示消息
  * @since 1.0
  */
 public class ToastUtils {
+
+    public static final Handler sHandler = new Handler(Looper.getMainLooper());
+
+    private static Toast sToast;
+
+
     /**
-     * @param msg 提示的文字
+     * 短提示
+     *
+     * @param text 提示文字
      */
-    public static void show(String msg) {
-        Toast.makeText(HLibrary.getLastActivity(), msg, Toast.LENGTH_SHORT).show();
+    public static void show(CharSequence text) {
+        show(text, Toast.LENGTH_SHORT);
+    }
+
+
+    /**
+     * @param msg      提示的文字
+     * @param duration 提示长短
+     */
+    public static void show(CharSequence msg, int duration) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            showInternal(msg, duration);
+        } else {
+            sHandler.post(() -> {
+                showInternal(msg, duration);
+            });
+        }
+    }
+
+    /**
+     * 提示信息
+     *
+     * @param text     提示文字
+     * @param duration 长短提示
+     */
+    private static void showInternal(CharSequence text, int duration) {
+        if (TextUtils.isEmpty(text)) {
+            return;
+        }
+        if (sToast != null) {
+            sToast.setText(text);
+            sToast.setDuration(duration);
+        } else {
+            sToast = Toast.makeText(HLibrary.getInstance().getContext(), text, duration);
+        }
+        sToast.show();
     }
 }

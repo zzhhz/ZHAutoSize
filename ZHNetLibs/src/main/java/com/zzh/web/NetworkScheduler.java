@@ -14,9 +14,17 @@ import io.reactivex.schedulers.Schedulers;
  * @email: zzh_hz@126.com
  * @QQ: 1299234582
  * @author: zzh
- * @description: NetworkScheduler.java 简化线程调度写作方式
+ * @description: NetworkScheduler.java 简化线程调度写作方式。
+ * 对Retrofit网络访问的声明周期进行管理。通常情况下是Activity 销毁时进行取消网络访问。
+ * 即网络访问与activity的声明周期进行绑定。
  */
 public class NetworkScheduler {
+    /**
+     * 绑定声明周期。
+     *
+     * @param <T>
+     * @return
+     */
     public static <T> ObservableTransformer<T, T> compose() {
         final Activity lastActivity = HLibrary.getLastActivity();
         if (lastActivity instanceof RxAppCompatActivity) {

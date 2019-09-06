@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -18,9 +17,7 @@ import android.os.StatFs;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import androidx.annotation.ColorInt;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -282,7 +279,7 @@ public class ZUtils {
                 .getExternalStorageState())) {
             return true;
         } else {
-            Log.w(TAG, "SDCARD is not MOUNTED !");
+            LogUtil.w("----没有SD 卡----");
             return false;
         }
     }
@@ -386,7 +383,7 @@ public class ZUtils {
         if (isMountedSDCard()) {
             File sdcardDir = Environment.getExternalStorageDirectory();
             if (!sdcardDir.canWrite()) {
-                Log.w(TAG, "SDCARD can not write !");
+                LogUtil.w("-----SDCARD can not write !----");
             }
             return sdcardDir.getPath();
         }
@@ -412,7 +409,6 @@ public class ZUtils {
      * @return
      */
     public static String getSDCardDirectory(String type) {
-
         if (isMountedSDCard()) {
             return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
         }
@@ -440,7 +436,7 @@ public class ZUtils {
      * 创建文件
      *
      * @param path 文件路径
-     * @return
+     * @return 创建文件是否成功。
      */
     public static boolean createSDCardFile(String path) {
         if (isMountedSDCard()) {
@@ -469,7 +465,7 @@ public class ZUtils {
      * 判断网络是否可用
      *
      * @param ctx
-     * @return
+     * @return true 网络可用。
      */
     public static boolean isNetWork(Context ctx) {
         if (ctx != null) {
@@ -486,7 +482,7 @@ public class ZUtils {
      * 判断wifi是否可用
      *
      * @param mContext
-     * @return
+     * @return true 网络可用。
      */
     public static boolean isWifi(Context mContext) {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -501,7 +497,7 @@ public class ZUtils {
      * 判断是哪一种网络
      *
      * @param ctx
-     * @return
+     * @return 返回网络类型
      */
     public static NetType getNetType(Context ctx) {
         if (!isNetWork(ctx)) {
