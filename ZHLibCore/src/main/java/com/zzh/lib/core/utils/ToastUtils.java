@@ -3,6 +3,8 @@ package com.zzh.lib.core.utils;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.zzh.lib.core.HLibrary;
@@ -53,6 +55,7 @@ public class ToastUtils {
      *
      * @param text     提示文字
      * @param duration 长短提示
+     *                 提示文字显示在屏幕中心
      */
     private static void showInternal(CharSequence text, int duration) {
         if (TextUtils.isEmpty(text)) {
@@ -64,6 +67,7 @@ public class ToastUtils {
         } else {
             sToast = Toast.makeText(HLibrary.getInstance().getContext(), text, duration);
         }
+        sToast.setGravity(Gravity.CENTER, 0, 0);
         sToast.show();
     }
 }
