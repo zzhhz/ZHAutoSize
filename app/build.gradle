@@ -30,4 +30,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
     implementation 'me.jessyan:autosize:1.1.2'
     implementation project(path: ':ZHNetLibs')
+    api project(path: ':ZHMVVMLibs')
 }
