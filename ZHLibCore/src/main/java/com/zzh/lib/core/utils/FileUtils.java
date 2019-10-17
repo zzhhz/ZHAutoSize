@@ -2,6 +2,7 @@ package com.zzh.lib.core.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.StatFs;
 import android.text.TextUtils;
 
 import java.io.BufferedOutputStream;
@@ -43,7 +44,7 @@ public class FileUtils {
      */
     public static boolean saveFile(byte[] data, File filePathName) {
         BufferedOutputStream bos = null;
-        if (ZUtils.isMountedSDCard()) {
+        if (isMountedSDCard()) {
             try {
                 bos = new BufferedOutputStream(new FileOutputStream(filePathName));
                 bos.write(data);
@@ -79,5 +80,168 @@ public class FileUtils {
         return cacheDir.getAbsolutePath();
     }
 
+    /**
+     * 获取可用的SD卡路径（若SD卡不没有挂载则返回""）
+     *
+     * @return
+     */
+    public static String getSDCardRootPath() {
+        if (isMountedSDCard()) {
+            File sdcardDir = Environment.getExternalStorageDirectory();
+            if (!sdcardDir.canWrite()) {
+                LogUtil.w("-----SDCARD can not write !----");
+            }
+            return sdcardDir.getPath();
+        }
+        return "";
+    }
 
+    /**
+     * 获取可用的SD卡文件实例
+     *
+     * @return SD卡文件实例
+     */
+    public static File getSDCardRootFile() {
+        if (isMountedSDCard()) {
+            return Environment.getExternalStorageDirectory();
+        }
+        return null;
+    }
+
+    /**
+     * 返回指定的文件路径
+     *
+     * @param type 文件类型
+     * @return
+     */
+    public static String getSDCardDirectory(String type) {
+        if (isMountedSDCard()) {
+            return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
+        }
+        return null;
+    }
+
+    /**
+     * 创建文件夹
+     *
+     * @param filePath 文件夹路径
+     * @return
+     */
+    public static boolean createSDCardDirectory(String filePath) {
+        if (isMountedSDCard()) {
+            String sdCardRootPath = getSDCardRootPath();
+            File file = new File(sdCardRootPath, filePath);
+            if (!file.exists()) {
+                return file.mkdirs();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 创建文件
+     *
+     * @param path 文件路径
+     * @return 创建文件是否成功。
+     */
+    public static boolean createSDCardFile(String path) {
+        if (isMountedSDCard()) {
+            File file = new File(path);
+            if (file.exists()) {
+                return true;
+            } else {
+                File parentFile = file.getParentFile();
+                boolean mkdirs = parentFile.mkdirs();
+                if (mkdirs) {
+                    try {
+                        return file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 检查是否已挂载SD卡镜像（是否存在SD卡）
+     *
+     * @return
+     */
+    public static boolean isMountedSDCard() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment
+                .getExternalStorageState())) {
+            return true;
+        } else {
+            LogUtil.w("----没有SD 卡----");
+            return false;
+        }
+    }
+
+    /**
+     * 获取应用缓存目录的绝对路径，优先使用外部SD卡的缓存路径
+     *
+     * @param context
+     * @return 缓存目录的绝对路径
+     */
+    public static String getDiskCacheDir(Context context) {
+        File cacheDir = context.getCacheDir();
+        if (isMountedSDCard()) {
+            File nCacheDir = context.getExternalCacheDir();
+            // 部分手机有卡不可写
+            if (nCacheDir != null) {
+                if (nCacheDir.canWrite()) {
+                    cacheDir = nCacheDir;
+                }
+            }
+        }
+        return cacheDir.getAbsolutePath();
+    }
+
+    /**
+     * 获取SD卡剩余容量（单位Byte）
+     *
+     * @return
+     */
+    public static long gainSDFreeSize() {
+        if (isMountedSDCard()) {
+            // 取得SD卡文件路径
+            File path = Environment.getExternalStorageDirectory();
+            StatFs sf = new StatFs(path.getPath());
+            // 获取单个数据块的大小(Byte)
+            long blockSize = sf.getBlockSize();
+            // 空闲的数据块的数量
+            long freeBlocks = sf.getAvailableBlocks();
+
+            // 返回SD卡空闲大小
+            return freeBlocks * blockSize; // 单位Byte
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 获取SD卡总容量（单位Byte）
+     *
+     * @return
+     */
+    public static long gainSDAllSize() {
+        if (isMountedSDCard()) {
+            // 取得SD卡文件路径
+            File path = Environment.getExternalStorageDirectory();
+            StatFs sf = new StatFs(path.getPath());
+            // 获取单个数据块的大小(Byte)
+            long blockSize = sf.getBlockSize();
+            // 获取所有数据块数
+            long allBlocks = sf.getBlockCount();
+            // 返回SD卡大小（Byte）
+            return allBlocks * blockSize;
+        } else {
+            return 0;
+        }
+    }
 }
