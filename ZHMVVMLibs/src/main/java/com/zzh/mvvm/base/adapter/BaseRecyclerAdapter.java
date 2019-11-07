@@ -67,4 +67,25 @@ public abstract class BaseRecyclerAdapter<T, V extends ViewDataBinding> extends 
     public int getItemCount() {
         return mDataList.size();
     }
+
+
+    /**
+     * 提供列表数据访问方法
+     *
+     * @return 列表集合
+     */
+    public List<T> getDataList() {
+        return mDataList;
+    }
+
+    /**
+     * 清楚列表数据方法
+     */
+    public void clear() {
+        if (mDataList != null && !mDataList.isEmpty()) {
+            mDataList.clear();
+            notifyDataSetChanged();
+        }
+    }
+
 }
