@@ -87,5 +87,4 @@ public abstract class BaseRecyclerAdapter<T, V extends ViewDataBinding> extends 
             notifyDataSetChanged();
         }
     }
-
 }
