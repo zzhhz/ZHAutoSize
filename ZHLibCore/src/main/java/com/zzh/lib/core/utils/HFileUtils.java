@@ -9,6 +9,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Administrator.
@@ -20,7 +23,7 @@ import java.io.IOException;
  * @description: ZzhLibs 文件操作
  * @since 1.0
  */
-public class FileUtils {
+public class HFileUtils {
     /**
      * 文件操作
      *
@@ -227,9 +230,9 @@ public class FileUtils {
     /**
      * 获取SD卡总容量（单位Byte）
      *
-     * @return
+     * @return SD卡的总容量
      */
-    public static long gainSDAllSize() {
+    public static long getSDAllSize() {
         if (isMountedSDCard()) {
             // 取得SD卡文件路径
             File path = Environment.getExternalStorageDirectory();
@@ -243,5 +246,40 @@ public class FileUtils {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * 格式化文件大小
+     *
+     * @param size 文件大小
+     * @return 格式化后的大小
+     */
+    public static String getFormatSize(long size) {
+        DecimalFormat formater = new DecimalFormat("####.00");
+        if (size < 1024) {
+            return size + "bytes";
+        } else if (size < 1024 * 1024) {
+            float kbSize = size / 1024f;
+            return formater.format(kbSize) + "KB";
+        } else if (size < 1024 * 1024 * 1024) {
+            float mbSize = size / 1024f / 1024f;
+            return formater.format(mbSize) + "MB";
+        } else if (size < 1024 * 1024 * 1024 * 1024) {
+            float gbSize = size / 1024f / 1024f / 1024f;
+            return formater.format(gbSize) + "GB";
+        } else {
+            return "size: error";
+        }
+    }
+
+    /**
+     * 针对视频文件，格式化播放时长
+     *
+     * @param time 视频文件总播放长度
+     * @return 格式化后的时间
+     */
+    public static String getFormatDateTime(long time) {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        return format.format(time);
     }
 }
